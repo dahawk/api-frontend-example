@@ -2,10 +2,10 @@ package main
 
 import (
 	"flag"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
-	"text/template"
 
 	"github.com/cumulodev/nimbusec"
 	"github.com/gorilla/handlers"
@@ -161,6 +161,8 @@ func getResults(w http.ResponseWriter, r *http.Request) {
 	data := Data{
 		Results: allres,
 	}
+
+	log.Printf("%+v", data)
 
 	tpl.ExecuteTemplate(w, "results.html", data)
 }
