@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/cumulodev/nimbusec"
 	"github.com/gorilla/handlers"
@@ -17,6 +18,7 @@ var (
 	key    string
 	secret string
 	apiurl string
+	api    *nimbusec.API
 )
 
 // Data for templates
@@ -27,12 +29,37 @@ type Data struct {
 	Domains []nimbusec.Domain
 }
 
+// DomainReport specifies a row in the table of the report
+type DomainReport struct {
+	URL           string
+	Webshell      int
+	Malware       int
+	Application   int
+	Text          int
+	Reputation    int
+	TLS           int
+	Configuration int
+}
+
+// ReportData holds the data for the report.
+type ReportData struct {
+	Data []DomainReport
+}
+
+type V map[string]interface{}
+
 func main() {
 	port := flag.String("port", "3000", "Port used for webserver")
 	flag.StringVar(&key, "key", "", "nimbusec API key")
 	flag.StringVar(&secret, "secret", "", "nimbusec API secret")
-	flag.StringVar(&apiurl, "apiurl", "https://api-dev.nimbusec.com/", "nimbusec API url")
+	flag.StringVar(&apiurl, "apiurl", nimbusec.DefaultAPI, "nimbusec API url")
 	flag.Parse()
+
+	var apierr error
+	api, apierr = nimbusec.NewAPI(apiurl, key, secret)
+	if apierr != nil {
+		log.Fatal(apierr)
+	}
 
 	var err error
 	tpl, err = template.ParseGlob("public/*.html")
@@ -46,11 +73,69 @@ func main() {
 	router.HandleFunc("/users", getUsers)
 	router.HandleFunc("/demoins", addDemo)
 	router.HandleFunc("/reset", reset)
+	router.HandleFunc("/report", viewReport)
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("public")))
 
 	log.Printf("[ info] listening on :%s ...", *port)
 	app := handlers.LoggingHandler(os.Stdout, router)
 	http.ListenAndServe(":"+*port, app)
+}
+
+func viewReport(w http.ResponseWriter, r *http.Request) {
+	today := time.Now().Format("2006-01-02")
+	rd := map[int]*DomainReport{}
+
+	issues, err := api.GetIssues()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Printf("issues length: %d\n", len(issues))
+
+	lookup := map[int]string{}
+	domains, _ := api.FindDomains("")
+	for _, domain := range domains {
+		lookup[domain.Id] = domain.Name
+	}
+
+	for _, issue := range issues {
+		log.Printf("processing issue %+v\n", issue)
+		domainid := issue.DomainID
+		category := issue.Category
+		severity := issue.Severity
+
+		if _, ok := rd[domainid]; !ok {
+			rd[domainid] = &DomainReport{
+				URL: lookup[domainid],
+			}
+		}
+
+		report := rd[domainid]
+		switch category {
+		case "webshell":
+			report.Webshell = severity
+		case "malware":
+			report.Malware = severity
+		case "tls":
+			report.TLS = severity
+		case "application":
+			report.Application = severity
+		case "text":
+			report.Text = severity
+		case "reputation":
+			report.Reputation = severity
+		case "configuration":
+			report.Configuration = severity
+		}
+	}
+
+	tplerr := tpl.ExecuteTemplate(w, "report.html", V{
+		"reports": rd,
+		"today":   today,
+	})
+	if tplerr != nil {
+		log.Fatal(err)
+	}
 }
 
 func reset(w http.ResponseWriter, r *http.Request) {

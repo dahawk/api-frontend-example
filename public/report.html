@@ -1,0 +1,109 @@
+<!doctype html>
+<html style="background-color: #fff">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//cdn.muicss.com/mui-latest/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <link href="/static/style.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="//cdn.muicss.com/mui-latest/js/mui.min.js"></script>
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.min.js"></script>
+    <script src="/static/script.js"></script>
+    <title>nimbusec api frontend demo</title>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        console.log("all ready");
+      });
+    </script>
+  </head>
+  <body style="background-color: #fff">
+    <div id="content-wrapper">
+      <div class="mui--appbar-height"></div>
+      <div class="mui-container-fluid">
+        <br>
+        <h1><img src="/logo.png" style="width:50px" /> DomainReport {{ .today }}
+          <img src="https://nimbusec.com/images/logo/logo-200-54.png" class="nimbusec-logo"/>
+        </h1>
+
+        <table class="mui-table mui-table--bordered">
+          <tr>
+            <th style="text-align: center">&nbsp;</th>
+            <th style="text-align: center"><canvas id="webshellchart" width="150" height="150"></canvas></th>
+            <th style="text-align: center"><canvas id="malwarechart" width="150" height="150"></canvas></th>
+            <th style="text-align: center"><canvas id="tlschart" width="150" height="150"></canvas></th>
+            <th style="text-align: center"><canvas id="applicationchart" width="150" height="150"></canvas></th>
+            <th style="text-align: center"><canvas id="textchart" width="150" height="150"></canvas></th>
+            <th style="text-align: center"><canvas id="reputationchart" width="150" height="150"></canvas></th>
+            <th style="text-align: center"><canvas id="configurationchart" width="150" height="150"></canvas></th>
+          </tr>
+          <tr>
+            <th style="text-align: center">&nbsp;</th>
+            <th style="text-align: center">
+              <i class="webshellcnt bubble0">-</i>
+              <i class="webshellcnt bubble1">-</i>
+              <i class="webshellcnt bubble2">-</i>
+            </th>
+            <th style="text-align: center">
+              <i class="malwarecnt bubble0">-</i>
+              <i class="malwarecnt bubble1">-</i>
+              <i class="malwarecnt bubble2">-</i>
+            </th>
+            <th style="text-align: center">
+              <i class="tlscnt bubble0">-</i>
+              <i class="tlscnt bubble1">-</i>
+              <i class="tlscnt bubble2">-</i>
+            </th>
+            <th style="text-align: center">
+              <i class="applicationcnt bubble0">-</i>
+              <i class="applicationcnt bubble1">-</i>
+              <i class="applicationcnt bubble2">-</i>
+            </th>
+            <th style="text-align: center">
+              <i class="textcnt bubble0">-</i>
+              <i class="textcnt bubble1">-</i>
+              <i class="textcnt bubble2">-</i>
+            </th>
+            <th style="text-align: center">
+              <i class="reputationcnt bubble0">-</i>
+              <i class="reputationcnt bubble1">-</i>
+              <i class="reputationcnt bubble2">-</i>
+            </th>
+            <th style="text-align: center">
+              <i class="configurationcnt bubble0">-</i>
+              <i class="configurationcnt bubble1">-</i>
+              <i class="configurationcnt bubble2">-</i>
+            </th>
+          </tr>
+          <tr>
+            <th style="text-align: center">URL</th>
+            <th style="text-align: center">WEBSHELL</th>
+            <th style="text-align: center">MALWARE</th>
+            <th style="text-align: center">TLS</th>
+            <th style="text-align: center">APPLICATION</th>
+            <th style="text-align: center">CONTENT</th>
+            <th style="text-align: center">REPUTATION</th>
+            <th style="text-align: center">CONFIGURATION</th>
+          </tr>
+          {{ range .reports }}
+          <tr>
+            <td style="text-align: right">{{.URL}}</td>
+            <td style="text-align: center"><a href="https://portal.nimbusec.com/domain/{{.URL}}/"><i class="cwebshell bubble{{.Webshell}}">&nbsp;&nbsp;&nbsp;&nbsp;</i></a></td>
+            <td style="text-align: center"><a href="https://portal.nimbusec.com/domain/{{.URL}}/"><i class="cmalware bubble{{.Malware}}">&nbsp;&nbsp;&nbsp;&nbsp;</i></a></td>
+            <td style="text-align: center"><a href="https://portal.nimbusec.com/domain/{{.URL}}/"><i class="ctls bubble{{.TLS}}">&nbsp;&nbsp;&nbsp;&nbsp;</i></a></td>
+            <td style="text-align: center"><a href="https://portal.nimbusec.com/domain/{{.URL}}/"><i class="capplication bubble{{.Application}}">&nbsp;&nbsp;&nbsp;&nbsp;</i></a></td>
+            <td style="text-align: center"><a href="https://portal.nimbusec.com/domain/{{.URL}}/"><i class="ctext bubble{{.Text}}">&nbsp;&nbsp;&nbsp;&nbsp;</i></a></td>
+            <td style="text-align: center"><a href="https://portal.nimbusec.com/domain/{{.URL}}/"><i class="creputation bubble{{.Reputation}}">&nbsp;&nbsp;&nbsp;&nbsp;</i></a></td>
+            <td style="text-align: center"><a href="https://portal.nimbusec.com/domain/{{.URL}}/"><i class="cconfiguration bubble{{.Configuration}}">&nbsp;&nbsp;&nbsp;&nbsp;</i></a></td>
+          </tr>
+          {{end}}
+        </table>
+      <footer id="footer" class="sc-gradient">
+      <div class="mui-container-fluid">
+        <br>
+        Made with ♥ by <a href="https://nimbusec.com">nimbusec</a>
+      </div>
+    </footer>
+  </body>
+</html>

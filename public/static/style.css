@@ -5,7 +5,7 @@
 html,
 body {
   height: 100%;
-  background-color: #eee;
+  background-color: #fff;
 }
 
 html,
@@ -164,7 +164,7 @@ buttons {
  */
 
 #footer {
-  background-color: #ff931e;
+  background-color: #0000a0;
   color: #fff;
 }
 
@@ -175,15 +175,40 @@ buttons {
 
 /* get the correct gradient for nimbusec */
 .sc-gradient {
-  background: #ff931e;
+  background: #0000a0;
 }
 
 .logo {
+  max-height: 64px;
+}
+
+.nimbusec-logo {
   max-width: 150px;
-  width: 100%;
+  display: block;
+  float: right;
+  margin-right: 15px;
 }
 
 .material-icons.move {
   padding-top: -3px;
   position: absolute;
+}
+
+
+.bubble, .bubble0, .bubble1, .bubble2, .bubble3 {
+  padding: 8px;
+  border-radius: 24px;
+
+}
+
+.bubble, .bubble0 {
+  background-color: #73bd2c;
+}
+
+.bubble1 {
+  background-color: #ffde66;
+}
+
+.bubble2 {
+  background-color: #ff744c;
 }
