@@ -41,11 +41,7 @@ type DomainReport struct {
 	Configuration int
 }
 
-// ReportData holds the data for the report.
-type ReportData struct {
-	Data []DomainReport
-}
-
+// V is an abstract data object like model in a java mvc application
 type V map[string]interface{}
 
 func main() {
