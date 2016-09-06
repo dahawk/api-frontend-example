@@ -134,59 +134,7 @@ func viewReport(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func reset(w http.ResponseWriter, r *http.Request) {
-	api, err := nimbusec.NewAPI(apiurl, key, secret)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// find and delete Demodomain
-	domains, err := api.FindDomains("name eq \"expired.badssl.com\"")
-	if err != nil {
-		log.Fatal(err)
-	}
-	for _, d := range domains {
-		api.DeleteDomain(&d, true)
-	}
-}
-
-func addDemo(w http.ResponseWriter, r *http.Request) {
-	api, err := nimbusec.NewAPI(apiurl, key, secret)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	bundles, err := api.FindBundles(nimbusec.EmptyFilter)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var bundle = ""
-	if bundles != nil {
-		bundle = bundles[0].Id
-	}
-
-	domain := nimbusec.Domain{
-		Bundle:    bundle,
-		Name:      "expired.badssl.com",
-		Scheme:    "https",
-		DeepScan:  "https://expired.badssl.com",
-		FastScans: []string{"https://expired.badssl.com/"},
-	}
-	_, err = api.CreateDomain(&domain)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	tpl.ExecuteTemplate(w, "data.html", nil)
-}
-
 func getIndex(w http.ResponseWriter, r *http.Request) {
-	api, err := nimbusec.NewAPI(apiurl, key, secret)
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	bundles, err := api.FindBundles(nimbusec.EmptyFilter)
 	if err != nil {
 		log.Fatal(err)
@@ -205,20 +153,15 @@ func getIndex(w http.ResponseWriter, r *http.Request) {
 }
 
 func getResults(w http.ResponseWriter, r *http.Request) {
-	api, err := nimbusec.NewAPI(apiurl, key, secret)
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	vars := mux.Vars(r)
 	q := vars["q"]
 
-	filter := "severity ge 1"
+	filter := "severity ge 1 and category eq \"configuration\""
 	if q == "red" {
-		filter = "severity eq 3"
+		filter = "severity eq 3 and category eq \"configuration\""
 	}
 	if q == "yel" {
-		filter = "severity eq 2"
+		filter = "severity eq 2 and category eq \"configuration\""
 	}
 
 	// Get all infected domains
@@ -249,11 +192,6 @@ func getResults(w http.ResponseWriter, r *http.Request) {
 }
 
 func getUsers(w http.ResponseWriter, r *http.Request) {
-	api, err := nimbusec.NewAPI(apiurl, key, secret)
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	users, err := api.FindUsers(nimbusec.EmptyFilter)
 	if err != nil {
 		log.Fatal(err)
@@ -264,4 +202,42 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tpl.ExecuteTemplate(w, "users.html", data)
+}
+
+/* DEMO HANDLERS */
+func reset(w http.ResponseWriter, r *http.Request) {
+	// find and delete Demodomain
+	domains, err := api.FindDomains("name eq \"expired.badssl.com\"")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, d := range domains {
+		api.DeleteDomain(&d, true)
+	}
+}
+
+func addDemo(w http.ResponseWriter, r *http.Request) {
+	bundles, err := api.FindBundles(nimbusec.EmptyFilter)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var bundle = ""
+	if bundles != nil {
+		bundle = bundles[0].Id
+	}
+
+	domain := nimbusec.Domain{
+		Bundle:    bundle,
+		Name:      "expired.badssl.com",
+		Scheme:    "https",
+		DeepScan:  "https://expired.badssl.com",
+		FastScans: []string{"https://expired.badssl.com/"},
+	}
+	_, err = api.CreateDomain(&domain)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	tpl.ExecuteTemplate(w, "data.html", nil)
 }
