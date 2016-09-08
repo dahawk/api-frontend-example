@@ -83,7 +83,7 @@ func viewReport(w http.ResponseWriter, r *http.Request) {
 
 	issues, err := api.GetIssues()
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("%+v", err)
 	}
 
 	log.Printf("issues length: %d\n", len(issues))
@@ -130,19 +130,19 @@ func viewReport(w http.ResponseWriter, r *http.Request) {
 		"today":   today,
 	})
 	if tplerr != nil {
-		log.Fatal(err)
+		log.Printf("%+v", err)
 	}
 }
 
 func getIndex(w http.ResponseWriter, r *http.Request) {
 	bundles, err := api.FindBundles(nimbusec.EmptyFilter)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("%+v", err)
 	}
 
 	domains, err := api.FindDomains(nimbusec.EmptyFilter)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("%+v", err)
 	}
 
 	data := Data{
@@ -167,7 +167,7 @@ func getResults(w http.ResponseWriter, r *http.Request) {
 	// Get all infected domains
 	domains, err := api.FindInfected(filter)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("%+v", err)
 	}
 
 	// Get all results of infected domains
@@ -175,7 +175,7 @@ func getResults(w http.ResponseWriter, r *http.Request) {
 	for _, domain := range domains {
 		results, err := api.FindResults(domain.Id, filter)
 		if err != nil {
-			log.Fatal(err)
+			log.Printf("%+v", err)
 		}
 		for _, result := range results {
 			allres = append(allres, result)
@@ -194,7 +194,7 @@ func getResults(w http.ResponseWriter, r *http.Request) {
 func getUsers(w http.ResponseWriter, r *http.Request) {
 	users, err := api.FindUsers(nimbusec.EmptyFilter)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("%+v", err)
 	}
 
 	data := Data{
@@ -209,7 +209,7 @@ func reset(w http.ResponseWriter, r *http.Request) {
 	// find and delete Demodomain
 	domains, err := api.FindDomains("name eq \"expired.badssl.com\"")
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("%+v", err)
 	}
 	for _, d := range domains {
 		api.DeleteDomain(&d, true)
@@ -219,7 +219,7 @@ func reset(w http.ResponseWriter, r *http.Request) {
 func addDemo(w http.ResponseWriter, r *http.Request) {
 	bundles, err := api.FindBundles(nimbusec.EmptyFilter)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("%+v", err)
 	}
 
 	var bundle = ""
@@ -236,7 +236,7 @@ func addDemo(w http.ResponseWriter, r *http.Request) {
 	}
 	_, err = api.CreateDomain(&domain)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("%+v", err)
 	}
 
 	tpl.ExecuteTemplate(w, "data.html", nil)
