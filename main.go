@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sort"
 	"time"
 
 	"github.com/cumulodev/nimbusec"
@@ -83,15 +84,20 @@ func viewReport(w http.ResponseWriter, r *http.Request) {
 
 	issues, err := api.GetIssues()
 	if err != nil {
-		log.Printf("%+v", err)
+		http.Error(w, err.Error(), http.StatusGatewayTimeout)
+		return
 	}
 
-	log.Printf("issues length: %d\n", len(issues))
+	domains, err := api.FindDomains("")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusGatewayTimeout)
+		return
+	}
 
-	lookup := map[int]string{}
-	domains, _ := api.FindDomains("")
 	for _, domain := range domains {
-		lookup[domain.Id] = domain.Name
+		rd[domain.Id] = &DomainReport{
+			URL: domain.Name,
+		}
 	}
 
 	for _, issue := range issues {
@@ -99,12 +105,6 @@ func viewReport(w http.ResponseWriter, r *http.Request) {
 		domainid := issue.DomainID
 		category := issue.Category
 		severity := issue.Severity
-
-		if _, ok := rd[domainid]; !ok {
-			rd[domainid] = &DomainReport{
-				URL: lookup[domainid],
-			}
-		}
 
 		report := rd[domainid]
 		switch category {
@@ -125,11 +125,18 @@ func viewReport(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	tplerr := tpl.ExecuteTemplate(w, "report.html", V{
-		"reports": rd,
+	// sort domains by name
+	list := make(ReportList, 0, len(rd))
+	for _, value := range rd {
+		list = append(list, value)
+	}
+	sort.Sort(list)
+
+	err = tpl.ExecuteTemplate(w, "report.html", V{
+		"reports": list,
 		"today":   today,
 	})
-	if tplerr != nil {
+	if err != nil {
 		log.Printf("%+v", err)
 	}
 }
@@ -240,4 +247,18 @@ func addDemo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tpl.ExecuteTemplate(w, "data.html", nil)
+}
+
+type ReportList []*DomainReport
+
+func (l ReportList) Len() int {
+	return len(l)
+}
+
+func (l ReportList) Less(i, j int) bool {
+	return l[i].URL < l[j].URL
+}
+
+func (l ReportList) Swap(i, j int) {
+	l[j], l[i] = l[i], l[j]
 }
