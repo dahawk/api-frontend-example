@@ -25,27 +25,27 @@ function drawCharts(){
                 $('.creputation.is-warning').length,
                 $('.creputation.is-danger').length];
 
-  $('.webshellcnt.bubble.is-success').html(webshellcnt[0]);
-  $('.webshellcnt.bubble.is-warning').html(webshellcnt[1]);
-  $('.webshellcnt.bubble.is-danger').html(webshellcnt[2]);
-  $('.malwarecnt.bubble.is-success').html(malwarecnt[0]);
-  $('.malwarecnt.bubble.is-warning').html(malwarecnt[1]);
-  $('.malwarecnt.bubble.is-danger').html(malwarecnt[2]);
-  $('.textcnt.bubble.is-success').html(textcnt[0]);
-  $('.textcnt.bubble.is-warning').html(textcnt[1]);
-  $('.textcnt.bubble.is-danger').html(textcnt[2]);
-  $('.applicationcnt.bubble.is-success').html(applicationcnt[0]);
-  $('.applicationcnt.bubble.is-warning').html(applicationcnt[1]);
-  $('.applicationcnt.bubble.is-danger').html(applicationcnt[2]);
-  $('.tlscnt.bubble.is-success').html(tlscnt[0]);
-  $('.tlscnt.bubble.is-warning').html(tlscnt[1]);
-  $('.tlscnt.bubble.is-danger').html(tlscnt[2]);
-  $('.reputationcnt.bubble.is-success').html(reputationcnt[0]);
-  $('.reputationcnt.bubble.is-warning').html(reputationcnt[1]);
-  $('.reputationcnt.bubble.is-danger').html(reputationcnt[2]);
-  $('.configurationcnt.bubble.is-success').html(configurationcnt[0]);
-  $('.configurationcnt.bubble.is-warning').html(configurationcnt[1]);
-  $('.configurationcnt.bubble.is-danger').html(configurationcnt[2]);
+  $('.webshellcnt.is-success').html(webshellcnt[0]);
+  $('.webshellcnt.is-warning').html(webshellcnt[1]);
+  $('.webshellcnt.is-danger').html(webshellcnt[2]);
+  $('.malwarecnt.is-success').html(malwarecnt[0]);
+  $('.malwarecnt.is-warning').html(malwarecnt[1]);
+  $('.malwarecnt.is-danger').html(malwarecnt[2]);
+  $('.textcnt.is-success').html(textcnt[0]);
+  $('.textcnt.is-warning').html(textcnt[1]);
+  $('.textcnt.is-danger').html(textcnt[2]);
+  $('.applicationcnt.is-success').html(applicationcnt[0]);
+  $('.applicationcnt.is-warning').html(applicationcnt[1]);
+  $('.applicationcnt.is-danger').html(applicationcnt[2]);
+  $('.tlscnt.is-success').html(tlscnt[0]);
+  $('.tlscnt.is-warning').html(tlscnt[1]);
+  $('.tlscnt.is-danger').html(tlscnt[2]);
+  $('.reputationcnt.is-success').html(reputationcnt[0]);
+  $('.reputationcnt.is-warning').html(reputationcnt[1]);
+  $('.reputationcnt.is-danger').html(reputationcnt[2]);
+  $('.configurationcnt.is-success').html(configurationcnt[0]);
+  $('.configurationcnt.is-warning').html(configurationcnt[1]);
+  $('.configurationcnt.is-danger').html(configurationcnt[2]);
 
 
   var options = {

@@ -13,7 +13,7 @@
     <section class="section hero">
       <div class="level is-mobile">
         <div class="level-item level-left">
-          <img class="image is-128x128" src="/static/img/iqm-logo.png" />
+          <img class="image is-128x128" src="/static/img/nimbusec-logo.png" />
         </div>
         <div class="level-item level-right">
           <img class="image is-128x128" src="/static/img/nimbusec-logo.png" />
@@ -24,17 +24,220 @@
     <section class="section hero">
       <h1 class="title">IT Sicherheitsreport {{ .today }}</h1>
     </section>
+
     <section class="section">
-      <div class="level is-mobile">
+      <div class="columns is-mobile">
+        <div class="column is-one-quarter">
+          <div class="card">
+            <canvas id="webshellchart" width="150" height="150"></canvas>
+            <div class="card-content">
+              <div class="level">
+                <div class="level-item has-text-centered">
+                  <h1 class="subtitle is-5">Web Shell</h1>
+                </div>
+              </div>
+              <div class="level">
+                <div class="level-item has-text-centered">
+                  <p class="heading"><i class="fa fa-check-circle is-success"></i></p>
+                  <p class="title webshellcnt is-success">-</p>
+                </div>
+                <div class="level-item has-text-centered has-text-centered">
+                  <p class="heading"><i class="fa fa-exclamation-triangle is-warning"></i></p>
+                  <p class="title webshellcnt is-warning">-</p>
+                </div>
+                <div class="level-item has-text-centered">
+                  <p class="heading"><i class="fa fa-exclamation-circle is-danger"></i></p>
+                  <p class="title webshellcnt is-danger">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="column is-one-quarter">
+          <div class="card">
+            <canvas id="malwarechart" width="150" height="150"></canvas>
+            <div class="card-content">
+              <div class="level">
+                <div class="level-item has-text-centered">
+                  <h1 class="subtitle is-5">Malware</h1>
+                </div>
+              </div>
+              <div class="level">
+                <div class="level-item has-text-centered">
+                  <p class="heading"><i class="fa fa-check-circle is-success"></i></p>
+                  <p class="title malwarecnt is-success">-</p>
+                </div>
+                <div class="level-item has-text-centered has-text-centered">
+                  <p class="heading"><i class="fa fa-exclamation-triangle is-warning"></i></p>
+                  <p class="title malwarecnt is-warning">-</p>
+                </div>
+                <div class="level-item has-text-centered">
+                  <p class="heading"><i class="fa fa-exclamation-circle is-danger"></i></p>
+                  <p class="title malwarecnt is-danger">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="column is-one-quarter">
+          <div class="card">
+            <canvas id="textchart" width="150" height="150"></canvas>
+            <div class="card-content">
+              <div class="level">
+                <div class="level-item has-text-centered">
+                  <h1 class="subtitle is-5">Content</h1>
+                </div>
+              </div>
+              <div class="level">
+                <div class="level-item has-text-centered">
+                  <p class="heading"><i class="fa fa-check-circle is-success"></i></p>
+                  <p class="title textcnt is-success">-</p>
+                </div>
+                <div class="level-item has-text-centered has-text-centered">
+                  <p class="heading"><i class="fa fa-exclamation-triangle is-warning"></i></p>
+                  <p class="title textcnt is-warning">-</p>
+                </div>
+                <div class="level-item has-text-centered">
+                  <p class="heading"><i class="fa fa-exclamation-circle is-danger"></i></p>
+                  <p class="title textcnt is-danger">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="column is-one-quarter">
+          <div class="card">
+            <canvas id="reputationchart" width="150" height="150"></canvas>
+            <div class="card-content">
+              <div class="level">
+                <div class="level-item has-text-centered">
+                  <h1 class="subtitle is-5">Reputation</h1>
+                </div>
+              </div>
+              <div class="level">
+                <div class="level-item has-text-centered">
+                  <p class="heading"><i class="fa fa-check-circle is-success"></i></p>
+                  <p class="title reputationcnt is-success">-</p>
+                </div>
+                <div class="level-item has-text-centered has-text-centered">
+                  <p class="heading"><i class="fa fa-exclamation-triangle is-warning"></i></p>
+                  <p class="title reputationcnt is-warning">-</p>
+                </div>
+                <div class="level-item has-text-centered">
+                  <p class="heading"><i class="fa fa-exclamation-circle is-danger"></i></p>
+                  <p class="title reputationcnt is-danger">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="columns is-mobile">
+        <div class="column is-one-quarter">
+          <div class="card">
+            <canvas id="tlschart" width="150" height="150"></canvas>
+            <div class="card-content">
+              <div class="level">
+                <div class="level-item has-text-centered">
+                  <h1 class="subtitle is-5">TLS</h1>
+                </div>
+              </div>
+              <div class="level">
+                <div class="level-item has-text-centered">
+                  <p class="heading"><i class="fa fa-check-circle is-success"></i></p>
+                  <p class="title tlscnt is-success">-</p>
+                </div>
+                <div class="level-item has-text-centered has-text-centered">
+                  <p class="heading"><i class="fa fa-exclamation-triangle is-warning"></i></p>
+                  <p class="title tlscnt is-warning">-</p>
+                </div>
+                <div class="level-item has-text-centered">
+                  <p class="heading"><i class="fa fa-exclamation-circle is-danger"></i></p>
+                  <p class="title tlscnt is-danger">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="column is-one-quarter">
+          <div class="card">
+            <canvas id="applicationchart" width="150" height="150"></canvas>
+            <div class="card-content">
+              <div class="level">
+                <div class="level-item has-text-centered">
+                  <h1 class="subtitle is-5">Application</h1>
+                </div>
+              </div>
+              <div class="level">
+                <div class="level-item has-text-centered">
+                  <p class="heading"><i class="fa fa-check-circle is-success"></i></p>
+                  <p class="title applicationcnt is-success">-</p>
+                </div>
+                <div class="level-item has-text-centered has-text-centered">
+                  <p class="heading"><i class="fa fa-exclamation-triangle is-warning"></i></p>
+                  <p class="title applicationcnt is-warning">-</p>
+                </div>
+                <div class="level-item has-text-centered">
+                  <p class="heading"><i class="fa fa-exclamation-circle is-danger"></i></p>
+                  <p class="title applicationcnt is-danger">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="column is-one-quarter">
+          <div class="card">
+            <canvas id="configurationchart" width="150" height="150"></canvas>
+            <div class="card-content">
+              <div class="level">
+                <div class="level-item has-text-centered">
+                  <h1 class="subtitle is-5">Configuration</h1>
+                </div>
+              </div>
+              <div class="level">
+                <div class="level-item has-text-centered">
+                  <p class="heading"><i class="fa fa-check-circle is-success"></i></p>
+                  <p class="title configurationcnt is-success">-</p>
+                </div>
+                <div class="level-item has-text-centered has-text-centered">
+                  <p class="heading"><i class="fa fa-exclamation-triangle is-warning"></i></p>
+                  <p class="title configurationcnt is-warning">-</p>
+                </div>
+                <div class="level-item has-text-centered">
+                  <p class="heading"><i class="fa fa-exclamation-circle is-danger"></i></p>
+                  <p class="title configurationcnt is-danger">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <!--<div class="level is-mobile">
         <div class="level-item">
           <div class="heading">
             <canvas id="webshellchart" width="150" height="150"></canvas>
           </div>
           <div class="title">
             <p class="subtitle">Web Shell</p>
-            <i class="webshellcnt bubble is-success">-</i>
-            <i class="webshellcnt bubble is-warning">-</i>
-            <i class="webshellcnt bubble is-danger">-</i>
+            <div class="level">
+              <div class="level-item has-text-centered">
+                <i class="webshellcnt bubble is-success">-</i>
+              </div>
+              <div class="level-item has-text-centered has-text-centered">
+                <i class="webshellcnt bubble is-warning">-</i>
+              </div>
+              <div class="level-item has-text-centered">
+                <i class="webshellcnt bubble is-danger">-</i>
+              </div>
+            </div>
           </div>
         </div>
         <div class="level-item">
@@ -43,9 +246,17 @@
           </div>
           <div class="title">
             <p class="subtitle">Malware</p>
-            <i class="malwarecnt bubble is-success">-</i>
-            <i class="malwarecnt bubble is-warning">-</i>
-            <i class="malwarecnt bubble is-danger">-</i>
+            <div class="level">
+              <div class="level-item has-text-centered">
+                <i class="malwarecnt bubble is-success">-</i>
+              </div>
+              <div class="level-item has-text-centered">
+                <i class="malwarecnt bubble is-warning">-</i>
+              </div>
+              <div class="level-item has-text-centered">
+                <i class="malwarecnt bubble is-danger">-</i>
+              </div>
+            </div>
           </div>
         </div>
         <div class="level-item">
@@ -54,9 +265,17 @@
           </div>
           <div class="title">
             <p class="subtitle">Content</p>
-            <i class="textcnt bubble is-success">-</i>
-            <i class="textcnt bubble is-warning">-</i>
-            <i class="textcnt bubble is-danger">-</i>
+            <div class="level">
+              <div class="level-item has-text-centered">
+                <i class="textcnt bubble is-success">-</i>
+              </div>
+              <div class="level-item has-text-centered">
+                <i class="textcnt bubble is-warning">-</i>
+              </div>
+              <div class="level-item has-text-centered">
+                <i class="textcnt bubble is-danger">-</i>
+              </div>
+            </div>
           </div>
         </div>
         <div class="level-item">
@@ -65,9 +284,17 @@
           </div>
           <div class="title">
             <p class="subtitle">TLS</p>
-            <i class="tlscnt bubble is-success">-</i>
-            <i class="tlscnt bubble is-warning">-</i>
-            <i class="tlscnt bubble is-danger">-</i>
+            <div class="level">
+              <div class="level-item has-text-centered">
+                <i class="tlscnt bubble is-success">-</i>
+              </div>
+              <div class="level-item has-text-centered">
+                <i class="tlscnt bubble is-warning">-</i>
+              </div>
+              <div class="level-item has-text-centered">
+                <i class="tlscnt bubble is-danger">-</i>
+              </div>
+            </div>
           </div>
         </div>
         <div class="level-item">
@@ -76,9 +303,17 @@
           </div>
           <div class="title">
             <p class="subtitle">Application</p>
-            <i class="applicationcnt bubble is-success">-</i>
-            <i class="applicationcnt bubble is-warning">-</i>
-            <i class="applicationcnt bubble is-danger">-</i>
+            <div class="level">
+              <div class="level-item has-text-centered">
+                <i class="applicationcnt bubble is-success">-</i>
+              </div>
+              <div class="level-item has-text-centered">
+                <i class="applicationcnt bubble is-warning">-</i>
+              </div>
+              <div class="level-item has-text-centered">
+                <i class="applicationcnt bubble is-danger">-</i>
+              </div>
+            </div>
           </div>
         </div>
         <div class="level-item">
@@ -87,9 +322,17 @@
           </div>
           <div class="title">
             <p class="subtitle">Reputation</p>
-            <i class="reputationcnt bubble is-success">-</i>
-            <i class="reputationcnt bubble is-warning">-</i>
-            <i class="reputationcnt bubble is-danger">-</i>
+            <div class="level">
+              <div class="level-item has-text-centered">
+                <i class="reputationcnt bubble is-success">-</i>
+              </div>
+              <div class="level-item has-text-centered">
+                <i class="reputationcnt bubble is-warning">-</i>
+              </div>
+              <div class="level-item has-text-centered">
+                <i class="reputationcnt bubble is-danger">-</i>
+              </div>
+            </div>
           </div>
         </div>
         <div class="level-item">
@@ -98,12 +341,20 @@
           </div>
           <div class="title">
             <p class="subtitle">Configuration</p>
-            <i class="configurationcnt bubble is-success">-</i>
-            <i class="configurationcnt bubble is-warning">-</i>
-            <i class="configurationcnt bubble is-danger">-</i>
+            <div class="level">
+              <div class="level-item has-text-centered">
+                <i class="configurationcnt bubble is-success">-</i>
+              </div>
+              <div class="level-item has-text-centered">
+                <i class="configurationcnt bubble is-warning">-</i>
+              </div>
+              <div class="level-item has-text-centered">
+                <i class="configurationcnt bubble is-danger">-</i>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <table class="table">
         <thead>
