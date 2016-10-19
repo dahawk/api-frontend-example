@@ -4,106 +4,177 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="//cdn.muicss.com/mui-latest/css/mui.min.css" rel="stylesheet" type="text/css" />
-    <link href="/static/style.css" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="//cdn.muicss.com/mui-latest/js/mui.min.js"></script>
-    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.min.js"></script>
-    <script src="/static/script.js"></script>
+    <link href="/static/css/nimbusec.css" rel="stylesheet" type="text/css" />
+    <script src="/static/js/vendor.js"></script>
+    <script src="/static/js/script.js"></script>
     <title>nimbusec api frontend demo</title>
-    <script type="text/javascript">
-      $(document).ready(function() {
-        console.log("all ready");
-      });
-    </script>
   </head>
   <body style="background-color: #fff">
-    <div id="content-wrapper">
-      <div class="mui--appbar-height"></div>
-      <div class="mui-container-fluid">
-        <br>
-        <h1><img src="/logo.png" style="width:50px" /> DomainReport {{ .today }}
-          <img src="https://nimbusec.com/images/logo/logo-200-54.png" class="nimbusec-logo"/>
-        </h1>
+    <section class="section hero">
+      <div class="level is-mobile">
+        <div class="level-item level-left">
+          <img class="image is-128x128" src="/static/img/iqm-logo.png" />
+        </div>
+        <div class="level-item level-right">
+          <img class="image is-128x128" src="/static/img/nimbusec-logo.png" />
+        </div>
+      </div>
+    </section>
 
-        <table class="mui-table mui-table--bordered">
+    <section class="section hero">
+      <h1 class="title">IT Sicherheitsreport {{ .today }}</h1>
+    </section>
+    <section class="section">
+      <div class="level is-mobile">
+        <div class="level-item">
+          <div class="heading">
+            <canvas id="webshellchart" width="150" height="150"></canvas>
+          </div>
+          <div class="title">
+            <p class="subtitle">Web Shell</p>
+            <i class="webshellcnt bubble is-success">-</i>
+            <i class="webshellcnt bubble is-warning">-</i>
+            <i class="webshellcnt bubble is-danger">-</i>
+          </div>
+        </div>
+        <div class="level-item">
+          <div class="heading">
+            <canvas id="malwarechart" width="150" height="150"></canvas>
+          </div>
+          <div class="title">
+            <p class="subtitle">Malware</p>
+            <i class="malwarecnt bubble is-success">-</i>
+            <i class="malwarecnt bubble is-warning">-</i>
+            <i class="malwarecnt bubble is-danger">-</i>
+          </div>
+        </div>
+        <div class="level-item">
+          <div class="heading">
+            <canvas id="textchart" width="150" height="150"></canvas>
+          </div>
+          <div class="title">
+            <p class="subtitle">Content</p>
+            <i class="textcnt bubble is-success">-</i>
+            <i class="textcnt bubble is-warning">-</i>
+            <i class="textcnt bubble is-danger">-</i>
+          </div>
+        </div>
+        <div class="level-item">
+          <div class="heading">
+            <canvas id="tlschart" width="150" height="150"></canvas>
+          </div>
+          <div class="title">
+            <p class="subtitle">TLS</p>
+            <i class="tlscnt bubble is-success">-</i>
+            <i class="tlscnt bubble is-warning">-</i>
+            <i class="tlscnt bubble is-danger">-</i>
+          </div>
+        </div>
+        <div class="level-item">
+          <div class="heading">
+            <canvas id="applicationchart" width="150" height="150"></canvas>
+          </div>
+          <div class="title">
+            <p class="subtitle">Application</p>
+            <i class="applicationcnt bubble is-success">-</i>
+            <i class="applicationcnt bubble is-warning">-</i>
+            <i class="applicationcnt bubble is-danger">-</i>
+          </div>
+        </div>
+        <div class="level-item">
+          <div class="heading">
+            <canvas id="reputationchart" width="150" height="150"></canvas>
+          </div>
+          <div class="title">
+            <p class="subtitle">Reputation</p>
+            <i class="reputationcnt bubble is-success">-</i>
+            <i class="reputationcnt bubble is-warning">-</i>
+            <i class="reputationcnt bubble is-danger">-</i>
+          </div>
+        </div>
+        <div class="level-item">
+          <div class="heading">
+            <canvas id="configurationchart" width="150" height="150"></canvas>
+          </div>
+          <div class="title">
+            <p class="subtitle">Configuration</p>
+            <i class="configurationcnt bubble is-success">-</i>
+            <i class="configurationcnt bubble is-warning">-</i>
+            <i class="configurationcnt bubble is-danger">-</i>
+          </div>
+        </div>
+      </div>
+
+      <table class="table">
+        <thead>
           <tr>
-            <th style="text-align: center">&nbsp;</th>
-            <th style="text-align: center"><canvas id="webshellchart" width="150" height="150"></canvas></th>
-            <th style="text-align: center"><canvas id="malwarechart" width="150" height="150"></canvas></th>
-            <th style="text-align: center"><canvas id="tlschart" width="150" height="150"></canvas></th>
-            <th style="text-align: center"><canvas id="applicationchart" width="150" height="150"></canvas></th>
-            <th style="text-align: center"><canvas id="textchart" width="150" height="150"></canvas></th>
-            <th style="text-align: center"><canvas id="reputationchart" width="150" height="150"></canvas></th>
-            <th style="text-align: center"><canvas id="configurationchart" width="150" height="150"></canvas></th>
+            <th class="has-text-right">URL</th>
+            <th class="has-text-centered">WEBSHELL</th>
+            <th class="has-text-centered">MALWARE</th>
+            <th class="has-text-centered">TLS</th>
+            <th class="has-text-centered">APPLICATION</th>
+            <th class="has-text-centered">CONTENT</th>
+            <th class="has-text-centered">REPUTATION</th>
+            <th class="has-text-centered">CONFIGURATION</th>
           </tr>
+        </thead>
+        <tfoot>
           <tr>
-            <th style="text-align: center">&nbsp;</th>
-            <th style="text-align: center">
-              <i class="webshellcnt bubble0">-</i>
-              <i class="webshellcnt bubble1">-</i>
-              <i class="webshellcnt bubble2">-</i>
-            </th>
-            <th style="text-align: center">
-              <i class="malwarecnt bubble0">-</i>
-              <i class="malwarecnt bubble1">-</i>
-              <i class="malwarecnt bubble2">-</i>
-            </th>
-            <th style="text-align: center">
-              <i class="tlscnt bubble0">-</i>
-              <i class="tlscnt bubble1">-</i>
-              <i class="tlscnt bubble2">-</i>
-            </th>
-            <th style="text-align: center">
-              <i class="applicationcnt bubble0">-</i>
-              <i class="applicationcnt bubble1">-</i>
-              <i class="applicationcnt bubble2">-</i>
-            </th>
-            <th style="text-align: center">
-              <i class="textcnt bubble0">-</i>
-              <i class="textcnt bubble1">-</i>
-              <i class="textcnt bubble2">-</i>
-            </th>
-            <th style="text-align: center">
-              <i class="reputationcnt bubble0">-</i>
-              <i class="reputationcnt bubble1">-</i>
-              <i class="reputationcnt bubble2">-</i>
-            </th>
-            <th style="text-align: center">
-              <i class="configurationcnt bubble0">-</i>
-              <i class="configurationcnt bubble1">-</i>
-              <i class="configurationcnt bubble2">-</i>
-            </th>
+            <th class="has-text-right">URL</th>
+            <th class="has-text-centered">WEBSHELL</th>
+            <th class="has-text-centered">MALWARE</th>
+            <th class="has-text-centered">TLS</th>
+            <th class="has-text-centered">APPLICATION</th>
+            <th class="has-text-centered">CONTENT</th>
+            <th class="has-text-centered">REPUTATION</th>
+            <th class="has-text-centered">CONFIGURATION</th>
           </tr>
-          <tr>
-            <th style="text-align: center">URL</th>
-            <th style="text-align: center">WEBSHELL</th>
-            <th style="text-align: center">MALWARE</th>
-            <th style="text-align: center">TLS</th>
-            <th style="text-align: center">APPLICATION</th>
-            <th style="text-align: center">CONTENT</th>
-            <th style="text-align: center">REPUTATION</th>
-            <th style="text-align: center">CONFIGURATION</th>
-          </tr>
+        </tfoot>
+        <tbody>
           {{ range .reports }}
           <tr>
-            <td style="text-align: right">{{.URL}}</td>
-            <td style="text-align: center"><a href="https://portal.nimbusec.com/domain/{{.URL}}/"><i class="cwebshell bubble{{.Webshell}}">&nbsp;&nbsp;&nbsp;&nbsp;</i></a></td>
-            <td style="text-align: center"><a href="https://portal.nimbusec.com/domain/{{.URL}}/"><i class="cmalware bubble{{.Malware}}">&nbsp;&nbsp;&nbsp;&nbsp;</i></a></td>
-            <td style="text-align: center"><a href="https://portal.nimbusec.com/domain/{{.URL}}/"><i class="ctls bubble{{.TLS}}">&nbsp;&nbsp;&nbsp;&nbsp;</i></a></td>
-            <td style="text-align: center"><a href="https://portal.nimbusec.com/domain/{{.URL}}/"><i class="capplication bubble{{.Application}}">&nbsp;&nbsp;&nbsp;&nbsp;</i></a></td>
-            <td style="text-align: center"><a href="https://portal.nimbusec.com/domain/{{.URL}}/"><i class="ctext bubble{{.Text}}">&nbsp;&nbsp;&nbsp;&nbsp;</i></a></td>
-            <td style="text-align: center"><a href="https://portal.nimbusec.com/domain/{{.URL}}/"><i class="creputation bubble{{.Reputation}}">&nbsp;&nbsp;&nbsp;&nbsp;</i></a></td>
-            <td style="text-align: center"><a href="https://portal.nimbusec.com/domain/{{.URL}}/"><i class="cconfiguration bubble{{.Configuration}}">&nbsp;&nbsp;&nbsp;&nbsp;</i></a></td>
+            <td class="has-text-right">{{.URL}}</td>
+            <td class="has-text-centered"><a href="https://portal.nimbusec.com/domain/{{.URL}}/">
+              {{ if eq .Webshell 0 }}<i class="cwebshell is-success fa fa-check-circle fa-2x"></i>{{ end }}
+              {{ if eq .Webshell 1 }}<i class="cwebshell is-warning fa fa-exclamation-triangle fa-2x"></i>{{ end }}
+              {{ if eq .Webshell 2 }}<i class="cwebshell is-danger fa fa-exclamation-circle fa-2x"></i>{{ end }}
+            </a></td>
+            <td class="has-text-centered"><a href="https://portal.nimbusec.com/domain/{{.URL}}/">
+              {{ if eq .Malware 0 }}<i class="cmalware is-success fa fa-check-circle fa-2x"></i>{{ end }}
+              {{ if eq .Malware 1 }}<i class="cmalware is-warning fa fa-exclamation-triangle fa-2x"></i>{{ end }}
+              {{ if eq .Malware 2 }}<i class="cmalware is-danger fa fa-exclamation-circle fa-2x"></i>{{ end }}
+            </a></td>
+            <td class="has-text-centered"><a href="https://portal.nimbusec.com/domain/{{.URL}}/">
+              {{ if eq .TLS 0 }}<i class="ctls is-success fa fa-check-circle fa-2x"></i>{{ end }}
+              {{ if eq .TLS 1 }}<i class="ctls is-warning fa fa-exclamation-triangle fa-2x"></i>{{ end }}
+              {{ if eq .TLS 2 }}<i class="ctls is-danger fa fa-exclamation-circle fa-2x"></i>{{ end }}
+            </a></td>
+            <td class="has-text-centered"><a href="https://portal.nimbusec.com/domain/{{.URL}}/">
+              {{ if eq .Application 0 }}<i class="capplication is-success fa fa-check-circle fa-2x"></i>{{ end }}
+              {{ if eq .Application 1 }}<i class="capplication is-warning fa fa-exclamation-triangle fa-2x"></i>{{ end }}
+              {{ if eq .Application 2 }}<i class="capplication is-danger fa fa-exclamation-circle fa-2x"></i>{{ end }}
+            </a></td>
+            <td class="has-text-centered"><a href="https://portal.nimbusec.com/domain/{{.URL}}/">
+              {{ if eq .Text 0 }}<i class="ctext is-success fa fa-check-circle fa-2x"></i>{{ end }}
+              {{ if eq .Text 1 }}<i class="ctext is-warning fa fa-exclamation-triangle fa-2x"></i>{{ end }}
+              {{ if eq .Text 2 }}<i class="ctext is-danger fa fa-exclamation-circle fa-2x"></i>{{ end }}
+              <i class="ctext bubble{{.Text}}">&nbsp;&nbsp;&nbsp;&nbsp;</i>
+            </a></td>
+            <td class="has-text-centered"><a href="https://portal.nimbusec.com/domain/{{.URL}}/">
+              {{ if eq .Reputation 0 }}<i class="creputation is-success fa fa-check-circle fa-2x"></i>{{ end }}
+              {{ if eq .Reputation 1 }}<i class="creputation is-warning fa fa-exclamation-triangle fa-2x"></i>{{ end }}
+              {{ if eq .Reputation 2 }}<i class="creputation is-danger fa fa-exclamation-circle fa-2x"></i>{{ end }}
+            </a></td>
+            <td class="has-text-centered"><a href="https://portal.nimbusec.com/domain/{{.URL}}/">
+              {{ if eq .Configuration 0 }}<i class="cconfiguration is-success fa fa-check-circle fa-2x"></i>{{ end }}
+              {{ if eq .Configuration 1 }}<i class="cconfiguration is-warning fa fa-exclamation-triangle fa-2x"></i>{{ end }}
+              {{ if eq .Configuration 2 }}<i class="cconfiguration is-danger fa fa-exclamation-circle fa-2x"></i>{{ end }}
+            </a></td>
           </tr>
           {{end}}
-        </table>
-      <footer id="footer" class="sc-gradient">
-      <div class="mui-container-fluid">
-        <br>
-        Made with ♥ by <a href="https://nimbusec.com">nimbusec</a>
-      </div>
-    </footer>
+        </tbody>
+      </table>
+    </section>
+
   </body>
 </html>

@@ -1,0 +1,35 @@
+{
+  "name": "api-frontend-example",
+  "version": "1.0.0",
+  "description": "Example Dashbaord which loads its data only over nimbusec API",
+  "main": "main.go",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nimbusec-oss/api-frontend-example.git"
+  },
+  "author": "Christian Baumgartner @nimbusec",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nimbusec-oss/api-frontend-example/issues"
+  },
+  "homepage": "https://github.com/nimbusec-oss/api-frontend-example#readme",
+  "dependencies": {
+    "bulma": "^0.2.3",
+    "chart.js": "^2.3.0",
+    "font-awesome": "^4.6.3"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-concurrent": "^2.3.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-sass": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "jquery": "^2.2.2",
+    "mocha": "^2.4.5"
+  },
+  "scripts": {
+    "build": "grunt",
+    "watch": "grunt dev",
+    "test": "mocha --compilers js:babel-register --recursive"
+  }
+}

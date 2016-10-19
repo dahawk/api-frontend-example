@@ -1,0 +1,76 @@
+// Override initial variables here
+// You can add new ones or update existing ones:
+
+$orange: #ff9100
+$primary: $orange
+$family-serif: "Roboto", serif // Add a serif family
+
+// Override generated variables here
+// For example, by default, the $danger color is $red and the font is sans-serif
+// You can change these values:
+
+$family-primary: $family-serif // Use the new serif family
+
+
+@import "../node_modules/bulma/bulma.sass"
+
+@import "../node_modules/font-awesome/scss/font-awesome.scss"
+
+img.logo
+  max-width: 200px
+
+.bubble
+  padding: .1em .2em
+  color: $grey-dark!important
+  text-align: center
+  border-radius: 42px
+  display: inline-block
+  min-width: 1.5em
+
+  &.is-success
+    background-color: $success
+  &.is-warning
+    background-color: $warning
+  &.is-danger
+    background-color: $danger
+
+.is-mute
+  color: $grey-light
+
+.is-danger
+  color: $danger
+
+.is-warning
+  color: $warning
+
+.is-success
+  color: $success
+
+
+.hero
+  &.discovery
+    background: #333333
+    .title
+      color: #ffffff
+    .level-item p
+      color: #ffffff
+
+.nimbusec
+  background: $orange
+  p
+    color: #333333
+    padding: .3em 0
+
+.category
+  &.is-success
+    color: $success
+  &.is-warning
+    color: $warning
+  &.is-danger
+    color: $danger
+
+th
+  &.has-text-centered
+    text-align: center
+  &.has-text-right
+    text-align: right

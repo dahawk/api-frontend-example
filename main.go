@@ -1,254 +1,80 @@
 package main
 
 import (
-	"flag"
+	"errors"
 	"html/template"
 	"log"
 	"net/http"
 	"os"
-	"sort"
-	"time"
 
 	"github.com/cumulodev/nimbusec"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
-var (
-	tpl    *template.Template
-	key    string
-	secret string
-	apiurl string
-	api    *nimbusec.API
-)
-
-// Data for templates
-type Data struct {
-	Bundles []nimbusec.Bundle
-	Results []nimbusec.Result
-	Users   []nimbusec.User
-	Domains []nimbusec.Domain
+// Controller is somewhat like a brain for this application
+type Controller struct {
+	tpl      *template.Template
+	nimbusec *nimbusec.API
+	reports  ReportList
+	devmode  bool
 }
 
 // DomainReport specifies a row in the table of the report
 type DomainReport struct {
-	URL           string
-	Webshell      int
-	Malware       int
-	Application   int
-	Text          int
-	Reputation    int
-	TLS           int
-	Configuration int
+	URL           string `json:"url"`
+	Webshell      int    `json:"webshell"`
+	Malware       int    `json:"malware"`
+	Application   int    `json:"application"`
+	Text          int    `json:"content"`
+	Reputation    int    `json:"reputation"`
+	TLS           int    `json:"tls"`
+	Configuration int    `json:"configuration"`
 }
 
 // V is an abstract data object like model in a java mvc application
 type V map[string]interface{}
 
 func main() {
-	port := flag.String("port", "3000", "Port used for webserver")
-	flag.StringVar(&key, "key", "", "nimbusec API key")
-	flag.StringVar(&secret, "secret", "", "nimbusec API secret")
-	flag.StringVar(&apiurl, "apiurl", nimbusec.DefaultAPI, "nimbusec API url")
-	flag.Parse()
+	ctl := &Controller{devmode: true}
 
-	var apierr error
-	api, apierr = nimbusec.NewAPI(apiurl, key, secret)
-	if apierr != nil {
-		log.Fatal(apierr)
+	// setup clients to whatever
+	var errapi error
+	ctl.nimbusec, errapi = nimbusec.NewAPI(
+		os.Getenv("NIMBUSEC_URL"),
+		os.Getenv("NIMBUSEC_KEY"),
+		os.Getenv("NIMBUSEC_SECRET"))
+	if errapi != nil {
+		log.Fatal(errapi)
 	}
 
-	var err error
-	tpl, err = template.ParseGlob("public/*.html")
-	if err != nil {
-		log.Fatalf("failed to parse templates: %v", err)
+	var errtpl error
+	ctl.tpl, errtpl = template.ParseGlob("public/*.html")
+	if errtpl != nil {
+		log.Fatalf("failed to parse templates: %v", errtpl)
 	}
 
+	// create http router
 	router := mux.NewRouter()
-	router.HandleFunc("/", getIndex)
-	router.HandleFunc("/results/{q}/", getResults)
-	router.HandleFunc("/users", getUsers)
-	router.HandleFunc("/demoins", addDemo)
-	router.HandleFunc("/reset", reset)
-	router.HandleFunc("/report", viewReport)
+	router.HandleFunc("/", ctl.Dashboard)
+	router.HandleFunc("/save", ctl.SaveReport)
+	//router.HandleFunc("/report/{name}", ctl.OpenReport)
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("public")))
 
-	log.Printf("[ info] listening on :%s ...", *port)
-	app := handlers.LoggingHandler(os.Stdout, router)
-	http.ListenAndServe(":"+*port, app)
-}
-
-func viewReport(w http.ResponseWriter, r *http.Request) {
-	today := time.Now().Format("2006-01-02")
-	rd := map[int]*DomainReport{}
-
-	issues, err := api.GetIssues()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusGatewayTimeout)
-		return
-	}
-
-	domains, err := api.FindDomains("")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusGatewayTimeout)
-		return
-	}
-
-	for _, domain := range domains {
-		rd[domain.Id] = &DomainReport{
-			URL: domain.Name,
-		}
-	}
-
-	for _, issue := range issues {
-		log.Printf("processing issue %+v\n", issue)
-		domainid := issue.DomainID
-		category := issue.Category
-		severity := issue.Severity
-
-		report := rd[domainid]
-		switch category {
-		case "webshell":
-			report.Webshell = severity
-		case "malware":
-			report.Malware = severity
-		case "tls":
-			report.TLS = severity
-		case "application":
-			report.Application = severity
-		case "text":
-			report.Text = severity
-		case "reputation":
-			report.Reputation = severity
-		case "configuration":
-			report.Configuration = severity
-		}
-	}
-
-	// sort domains by name
-	list := make(ReportList, 0, len(rd))
-	for _, value := range rd {
-		list = append(list, value)
-	}
-	sort.Sort(list)
-
-	err = tpl.ExecuteTemplate(w, "report.html", V{
-		"reports": list,
-		"today":   today,
+	router.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		Error(w, r, http.StatusNotFound, errors.New("not found"))
 	})
-	if err != nil {
-		log.Printf("%+v", err)
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000"
 	}
+	log.Printf("[ info] listening on :%s ...", port)
+	app := handlers.LoggingHandler(os.Stdout, router)
+	http.ListenAndServe(":"+port, app)
 }
 
-func getIndex(w http.ResponseWriter, r *http.Request) {
-	bundles, err := api.FindBundles(nimbusec.EmptyFilter)
-	if err != nil {
-		log.Printf("%+v", err)
-	}
-
-	domains, err := api.FindDomains(nimbusec.EmptyFilter)
-	if err != nil {
-		log.Printf("%+v", err)
-	}
-
-	data := Data{
-		Bundles: bundles,
-		Domains: domains,
-	}
-	tpl.ExecuteTemplate(w, "index.html", data)
-}
-
-func getResults(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	q := vars["q"]
-
-	filter := "severity ge 1 and category eq \"configuration\""
-	if q == "red" {
-		filter = "severity eq 3 and category eq \"configuration\""
-	}
-	if q == "yel" {
-		filter = "severity eq 2 and category eq \"configuration\""
-	}
-
-	// Get all infected domains
-	domains, err := api.FindInfected(filter)
-	if err != nil {
-		log.Printf("%+v", err)
-	}
-
-	// Get all results of infected domains
-	var allres []nimbusec.Result
-	for _, domain := range domains {
-		results, err := api.FindResults(domain.Id, filter)
-		if err != nil {
-			log.Printf("%+v", err)
-		}
-		for _, result := range results {
-			allres = append(allres, result)
-		}
-	}
-
-	data := Data{
-		Results: allres,
-	}
-
-	log.Printf("%+v", data)
-
-	tpl.ExecuteTemplate(w, "results.html", data)
-}
-
-func getUsers(w http.ResponseWriter, r *http.Request) {
-	users, err := api.FindUsers(nimbusec.EmptyFilter)
-	if err != nil {
-		log.Printf("%+v", err)
-	}
-
-	data := Data{
-		Users: users,
-	}
-
-	tpl.ExecuteTemplate(w, "users.html", data)
-}
-
-/* DEMO HANDLERS */
-func reset(w http.ResponseWriter, r *http.Request) {
-	// find and delete Demodomain
-	domains, err := api.FindDomains("name eq \"expired.badssl.com\"")
-	if err != nil {
-		log.Printf("%+v", err)
-	}
-	for _, d := range domains {
-		api.DeleteDomain(&d, true)
-	}
-}
-
-func addDemo(w http.ResponseWriter, r *http.Request) {
-	bundles, err := api.FindBundles(nimbusec.EmptyFilter)
-	if err != nil {
-		log.Printf("%+v", err)
-	}
-
-	var bundle = ""
-	if bundles != nil {
-		bundle = bundles[0].Id
-	}
-
-	domain := nimbusec.Domain{
-		Bundle:    bundle,
-		Name:      "expired.badssl.com",
-		Scheme:    "https",
-		DeepScan:  "https://expired.badssl.com",
-		FastScans: []string{"https://expired.badssl.com/"},
-	}
-	_, err = api.CreateDomain(&domain)
-	if err != nil {
-		log.Printf("%+v", err)
-	}
-
-	tpl.ExecuteTemplate(w, "data.html", nil)
-}
-
+// ReportList makes the Domainreports sortable
 type ReportList []*DomainReport
 
 func (l ReportList) Len() int {
