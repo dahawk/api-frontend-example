@@ -1,25 +1,48 @@
 # api-frontend-example
-This frontend is just for demonstration use. You may extend or modify to your liking.
+This frontend is just for demonstration use. You may extend or modify to your liking. There are currently 2 endpoints defined:
 
-To run this application, you need go to be installed, and GOPATH to be set.
+`/` --> fetch report data and show it as dashboard
 
-Start the server simply with
+`/save` --> Output of the report data as JSON
+
+
+
+To run this application, you need go (https://golang.org) to be installed, and GOPATH to be set.
+
+## Installation
+
+In the repository directory:
+
+Fetch the go dependencies and build the application:
 
     go get
-    go run main.go -key abc -secret abc
+    go build
 
-Open the application in a browser with http://localhost:3000
+Build the static frontend files:
 
-## Parameters
+    npm install
+    grunt
 
-See available parameters by running
+Set the environment variables, described under `Setup`.
 
-    go run main.go -h
+Start the server
 
-port: OPTIONAL, specify the port the webserver should be listen. Default 3000
+    ./api-frontend-example
 
-key: REQUIRED nimbusec api key
+## Setup
 
-secret: REQUIRED nimbusec api secret
+The application is configured over environment variables. These have to be set to get it running:
 
-apiurl: OPTIONAL, set a different api url 
+Name | Required | Description
+---- | -------- | -----------
+NIMUBSEC_KEY | x | Nimbusec API Key
+NIMUBSEC_SECRET | x | Nimbusec API Secret
+NIMUBSEC_URL | x | Nimbusec API URL
+NIMBUSEC_REPORT_LOGO |  | If you want your own logo on the report, set this option. Defaults to static folder `/static/img/nimbusec-logo.png` but you can also use an URL like `https://nimbusec.com/images/logo/logo-200-54.png`
+PORT |  | Defaults to port `3000`
+
+Once done you may open the application in your browser pointing to http://localhost:3000 .
+
+## Modifications
+
+As it is an example, you can modify the application to your needs anytime. If you like to change the templates, images or anything static -> have a look in the `public` folder. 
