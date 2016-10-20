@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"html/template"
 	"log"
 	"net/http"
 	"sort"
@@ -69,12 +68,10 @@ func (ctl *Controller) Dashboard(w http.ResponseWriter, r *http.Request) {
 
 	ctl.reports = reports
 
-	if ctl.devmode {
-		ctl.tpl, _ = template.ParseGlob("public/*.html")
-	}
 	err = ctl.tpl.ExecuteTemplate(w, "report.html", V{
-		"reports": ctl.reports,
-		"today":   today,
+		"reports":    ctl.reports,
+		"today":      today,
+		"reportlogo": ctl.reportlogo,
 	})
 	if err != nil {
 		log.Printf("%+v", err)

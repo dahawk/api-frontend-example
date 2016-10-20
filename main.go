@@ -14,10 +14,10 @@ import (
 
 // Controller is somewhat like a brain for this application
 type Controller struct {
-	tpl      *template.Template
-	nimbusec *nimbusec.API
-	reports  ReportList
-	devmode  bool
+	tpl        *template.Template
+	nimbusec   *nimbusec.API
+	reports    ReportList
+	reportlogo string
 }
 
 // DomainReport specifies a row in the table of the report
@@ -36,7 +36,14 @@ type DomainReport struct {
 type V map[string]interface{}
 
 func main() {
-	ctl := &Controller{devmode: true}
+	ctl := &Controller{
+		reportlogo: "/static/img/nimbusec-logo.png",
+	}
+
+	rl := os.Getenv("NIMBUSEC_REPORT_LOGO")
+	if rl != "" {
+		ctl.reportlogo = rl
+	}
 
 	// setup clients to whatever
 	var errapi error
