@@ -8006,6 +8006,14 @@ a.panel-block:hover {
   clip: auto;
 }
 
+.card {
+  width: auto !important;
+}
+
+canvas.chart {
+  margin: auto;
+}
+
 img.logo {
   max-width: 200px;
 }

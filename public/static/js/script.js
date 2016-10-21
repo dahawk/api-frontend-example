@@ -49,7 +49,7 @@ function drawCharts(){
 
 
   var options = {
-    responsive: true,
+    responsive: false,
     legend: {
       display: false
     }
