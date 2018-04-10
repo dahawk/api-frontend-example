@@ -15,11 +15,11 @@
   "homepage": "https://github.com/nimbusec-oss/api-frontend-example#readme",
   "dependencies": {
     "bulma": "^0.2.3",
-    "chart.js": "^2.7.1",
+    "chart.js": "^2.7.2",
     "font-awesome": "^4.7.0"
   },
   "devDependencies": {
-    "grunt": "^1.0.1",
+    "grunt": "^1.0.2",
     "grunt-concurrent": "^2.3.1",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-sass": "^1.0.0",
