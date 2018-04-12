@@ -1,6 +1,5 @@
 var path = require('path');
 var dst = path.join(__dirname, '..', 'public', 'static');
-var css = path.join(dst, 'css') + '/nimbusec.css';
 
 module.exports = function(grunt) {
   grunt.initConfig({
@@ -9,7 +8,7 @@ module.exports = function(grunt) {
     concat: {
       main: {
         src: ['node_modules/jquery/dist/jquery.min.js', 'node_modules/chart.js/dist/Chart.min.js'],
-        dest: 'public/static/js/vendor.js'
+        dest: path.join(dst,'js','vendor.js')
       }
     },
 
@@ -19,7 +18,7 @@ module.exports = function(grunt) {
           style: 'expanded'
         },
         files: {
-          'public/static/css/nimbusec.css': 'sass/nimbusec.sass'
+          [path.join(dst,'css','nimbusec.css')] : 'sass/nimbusec.sass'
         }
       }
     },
@@ -42,7 +41,7 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-concurrent');
 
